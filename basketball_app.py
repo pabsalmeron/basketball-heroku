@@ -13,8 +13,16 @@ This app performs simple webscraping of NBA player stats data!
 * **Data source:** [Basketball-reference.com](https://www.basketball-reference.com/).
 * ** Made by Data Professor, and updated by Pablo Salmeron**
 """)
-
+#REALIZANDO PRUEBAS
 st.sidebar.header('User Input Features')
+player_selectbox = st.sidebar.selectbox(
+    'Which player stats are you looking for?',
+    (INPUT'')
+)
+
+#A PARTIR DE AQUI TODO OK
+
+
 selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950,2022))))
 
 # Web scraping of NBA player stats
@@ -28,6 +36,11 @@ def load_data(year):
     playerstats = raw.drop(['Rk'], axis=1)
     return playerstats
 playerstats = load_data(selected_year)
+
+# Sidebar - Player selection
+sorted_unique_player = sorted(playerstats.Player)
+selected_player = st.sidebar.multiselect('Player', sorted_unique_player, sorted_unique_player)
+
 
 # Sidebar - Team selection
 sorted_unique_team = sorted(playerstats.Tm.unique())

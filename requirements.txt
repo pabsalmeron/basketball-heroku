@@ -1,5 +1,5 @@
 streamlit==0.74.1
-pandas==2.7.3
+pandas
 lxml==4.6.2
 numpy==1.16.5
 seaborn==0.11.1

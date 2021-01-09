@@ -17,7 +17,6 @@ This app performs simple webscraping of NBA player stats data!
 st.sidebar.header('User Input Features')
 player_selectbox = st.sidebar.selectbox(
     'Which player stats are you looking for?', [playerstats.Player] )
-)
 
 #A PARTIR DE AQUI TODO OK
 

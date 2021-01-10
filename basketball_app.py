@@ -15,12 +15,7 @@ This app performs simple webscraping of NBA player stats data!
 """)
 #REALIZANDO PRUEBAS
 st.sidebar.header('User Input Features')
-player_selectbox = st.sidebar.selectbox(
-    'Which player stats are you looking for?', [playerstats.Player] )
-
-#A PARTIR DE AQUI TODO OK
-
-
+player_name = st.sidebar.text_input('Are You Looking For Any Player in Particular?')
 selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950,2022))))
 
 # Web scraping of NBA player stats
@@ -50,6 +45,18 @@ selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)
 
 # Filtering data
 df_selected_team = playerstats[(playerstats.Tm.isin(selected_team)) & (playerstats.Pos.isin(selected_pos))]
+
+
+
+st.header('Player Stats That You Were Looking For! ')
+st.markdown("""
+*Just Write in the Search Box!*
+""")
+st.dataframe(df_selected_player)
+
+st.header('Display Players Stats of Selected Team(s)')
+st.write('Data Dimension: ' + str(df_selected_team.shape[0]) + ' rows and ' + str(df_selected_team.shape[1]) + ' columns.')
+st.dataframe(df_selected_team)
 
 st.header('Display Player Stats of Selected Team(s)')
 st.write('Data Dimension: ' + str(df_selected_team.shape[0]) + ' rows and ' + str(df_selected_team.shape[1]) + ' columns.')

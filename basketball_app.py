@@ -5,15 +5,15 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-st.title('NBA Player Stats Explorer')
+st.title('NBA Stats Explorer')
 
 st.markdown("""
 This app performs simple webscraping of NBA player stats data!
-* **Python libraries:** base64, pandas, streamlit
+* **Python libraries:** base64, pandas, streamlit, matplotlib, seaborn. numpy
 * **Data source:** [Basketball-reference.com](https://www.basketball-reference.com/).
 * ** Made by Data Professor, and updated by Pablo Salmeron**
 """)
-#REALIZANDO PRUEBAS
+
 st.sidebar.header('User Input Features')
 player_name = st.sidebar.text_input('Are You Looking For Any Player in Particular?')
 selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950,2022))))
@@ -30,10 +30,9 @@ def load_data(year):
     return playerstats
 playerstats = load_data(selected_year)
 
-# Sidebar - Player selection
 sorted_unique_player = sorted(playerstats.Player)
-selected_player = st.sidebar.multiselect('Player', sorted_unique_player, sorted_unique_player)
-
+selected_player = st.sidebar.multiselect('Player', sorted_unique_player)
+#player_name = st.sidebar.text_input('Enter a player name if you want')
 
 # Sidebar - Team selection
 sorted_unique_team = sorted(playerstats.Tm.unique())
@@ -46,9 +45,19 @@ selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)
 # Filtering data
 df_selected_team = playerstats[(playerstats.Tm.isin(selected_team)) & (playerstats.Pos.isin(selected_pos))]
 
+#def check_data(df, player, selected_pos=selected_pos, selected_team=selected_team):
+#    if player not in df.Player:
+#        no_player_team = playerstats[(playerstats.Tm.isin(selected_team)) & (playerstats.Pos.isin(selected_pos))]
+#        return no_player_team
+#    else:
+#        player_team =  playerstats[(playerstats.Tm.isin(selected_team)) & (playerstats.Pos.isin(selected_pos)) & (playerstats['Player'] == player_name)]
+#        return player_team
 
+#df_selected_team = check_data(playerstats, player_name)
 
-st.header('Player Stats That You Were Looking For! ')
+df_selected_player = playerstats[playerstats.Player.isin(selected_player)]
+
+st.header('Player Stats That You Are Looking For! ')
 st.markdown("""
 *Just Write in the Search Box!*
 """)
@@ -58,9 +67,7 @@ st.header('Display Players Stats of Selected Team(s)')
 st.write('Data Dimension: ' + str(df_selected_team.shape[0]) + ' rows and ' + str(df_selected_team.shape[1]) + ' columns.')
 st.dataframe(df_selected_team)
 
-st.header('Display Player Stats of Selected Team(s)')
-st.write('Data Dimension: ' + str(df_selected_team.shape[0]) + ' rows and ' + str(df_selected_team.shape[1]) + ' columns.')
-st.dataframe(df_selected_team)
+
 
 # Download NBA player stats data
 # https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806
@@ -72,6 +79,10 @@ def filedownload(df):
 
 st.markdown(filedownload(df_selected_team), unsafe_allow_html=True)
 
+
+st.markdown("""
+*Display an Amazing Heatmap!*
+""")
 # Heatmap
 if st.button('Intercorrelation Heatmap'):
     st.header('Intercorrelation Matrix Heatmap')
@@ -84,5 +95,4 @@ if st.button('Intercorrelation Heatmap'):
     with sns.axes_style("white"):
         f, ax = plt.subplots(figsize=(7, 5))
         ax = sns.heatmap(corr, mask=mask, vmax=1, square=True)
-    #its necessary to fill the st.pyplot with the figure variable because the empty option is deprecated
-    st.pyplot(f)
+    st.pyplot(f) 

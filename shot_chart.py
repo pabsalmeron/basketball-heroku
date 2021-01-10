@@ -5,6 +5,7 @@ import pandas as pd
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
+# Teams
 teams = json.loads(requests.get('https://raw.githubusercontent.com/bttmly/nba/master/data/teams.json').text)
 
 def get_team_id(team_name):
@@ -13,6 +14,7 @@ def get_team_id(team_name):
             return team['teamId']
     return -1
 
+# Players
 players = json.loads(requests.get('https://raw.githubusercontent.com/bttmly/nba/master/data/players.json').text)
 
 def get_player_id(first, last):
@@ -21,20 +23,25 @@ def get_player_id(first, last):
             return player['playerId']
     return -1
 
+name, lastname = player_name.str.split('')
 shot_json = shotchartdetail.ShotChartDetail(
-            team_id = get_team_id('Golden State Warriors'),
-            player_id = get_player_id('Stephen', 'Curry'),
+            team_id = get_team_id(f'{selected_team}'),
+            player_id = get_player_id(f'{name}', f'{lastname}'),
             context_measure_simple = 'PTS',
-            season_nullable = '2015-16',
+            season_nullable = f'{selected_year}',
             season_type_all_star = 'Regular Season')
+
 shot_data = json.loads(shot_json.get_json())
+
 relevant_data = shot_data['resultSets'][0]
 headers = relevant_data['headers']
 rows = relevant_data['rowSet']
 
 # Create pandas DataFrame
-curry_data = pd.DataFrame(rows)
-curry_data.columns = headers
+player_data = pd.DataFrame(rows)
+player_data.columns = headers
+
+player_data.columns
 
 def create_court(ax, color):
     
@@ -79,6 +86,7 @@ params = {'legend.fontsize': 'large',
           'axes.titlepad': 25}
 plt.rcParams.update(params)
 
+# Create figure and axes
 fig = plt.figure(figsize=(4, 3.76))
 ax = fig.add_axes([0, 0, 1, 1])
 
@@ -86,10 +94,10 @@ ax = fig.add_axes([0, 0, 1, 1])
 ax = create_court(ax, 'black')
 
 # Plot hexbin of shots
-ax.hexbin(curry_data['LOC_X'], curry_data['LOC_Y'] + 60, gridsize=(30, 30), extent=(-300, 300, 0, 940), bins='log', cmap='Blues')
+ax.hexbin(player_data['LOC_X'], player_data['LOC_Y'] + 60, gridsize=(30, 30), extent=(-300, 300, 0, 940), bins='log', cmap='Blues')
 
 # Annotate player name and season
-fig.text(0, 1.05, 'Stephen Curry\n2015-16 Regular Season', transform=ax.transAxes, ha='left', va='baseline')
+fig.text(0, 1.05, f'{player_name} \n {selected_year} Regular Season', transform=ax.transAxes, ha='left', va='baseline')
 ax.text(0, -0.075, 'Author: Pablo Salmerón', transform=ax.transAxes, ha='left')
 # Save and show figure
 plt.savefig('ShotChart.png', dpi=300, bbox_inches='tight')

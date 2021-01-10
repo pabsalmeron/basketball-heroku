@@ -1,35 +1,40 @@
-import numpy as np
-import pandas as pd
-from nba_api.stats.static import players
 from nba_api.stats.endpoints import shotchartdetail
-from nba_api.stats.endpoints import playercareerstats
-
 import json
 import requests
 import pandas as pd
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-def get_player_shotchartdetail(player_name, selected_year):
-    
-    # player dictionary
-    nba_players = player.get_players()
-    player_dict = [player for player in nba_players if player['full_name'] == player_name][0]
-    
-    # career dataframe
-    career = playercareerstats.PlayerCareerStats(player_id= player_dict['id'])
-    career_df = career.get_data_frames()[0]
-    
-    # team id during season
-    team_id = career_df[career_df['SEASON_ID'] == selected_year]['TEAM_ID']
-    
-    # shotchartdetail endpoints
-    shotchartlist = shotchartdetail.ShotChartDetail(team_id=int(team_id),
-                                                   player_id=int(player_dict['id']),
-                                                   season_type_all_star='Regular Season',
-                                                   season_nullable=selected_year,
-                                                   context_measure_simple='FGA').get_data_frames()
-    return shotchartlist[0], shotchartlist[1]
+teams = json.loads(requests.get('https://raw.githubusercontent.com/bttmly/nba/master/data/teams.json').text)
+
+def get_team_id(team_name):
+    for team in teams:
+        if team['teamName'] == team_name:
+            return team['teamId']
+    return -1
+
+players = json.loads(requests.get('https://raw.githubusercontent.com/bttmly/nba/master/data/players.json').text)
+
+def get_player_id(first, last):
+    for player in players:
+        if player['firstName'] == first and player['lastName'] == last:
+            return player['playerId']
+    return -1
+
+shot_json = shotchartdetail.ShotChartDetail(
+            team_id = get_team_id('Golden State Warriors'),
+            player_id = get_player_id('Stephen', 'Curry'),
+            context_measure_simple = 'PTS',
+            season_nullable = '2015-16',
+            season_type_all_star = 'Regular Season')
+shot_data = json.loads(shot_json.get_json())
+relevant_data = shot_data['resultSets'][0]
+headers = relevant_data['headers']
+rows = relevant_data['rowSet']
+
+# Create pandas DataFrame
+curry_data = pd.DataFrame(rows)
+curry_data.columns = headers
 
 def create_court(ax, color):
     
@@ -64,10 +69,16 @@ def create_court(ax, color):
     
     return ax
 
-mpl.rcParams['font.family'] = 'Dejavu Sans'
-mpl.rcParams['font.size'] = 18
-mpl.rcParams['axes.linewidth'] = 2
-# Create figure and axes
+size=15
+params = {'legend.fontsize': 'large',
+          'figure.figsize': (20,8),
+          'axes.labelsize': 'small',
+          'axes.titlesize': 10,
+          'xtick.labelsize': 2*0.75,
+          'ytick.labelsize': 2*0.75,
+          'axes.titlepad': 25}
+plt.rcParams.update(params)
+
 fig = plt.figure(figsize=(4, 3.76))
 ax = fig.add_axes([0, 0, 1, 1])
 
@@ -75,11 +86,11 @@ ax = fig.add_axes([0, 0, 1, 1])
 ax = create_court(ax, 'black')
 
 # Plot hexbin of shots
-ax.hexbin(player_data['LOC_X'], player_data['LOC_Y'] + 60, gridsize=(30, 30), extent=(-300, 300, 0, 940), bins='log', cmap='coolwarm_r')
+ax.hexbin(curry_data['LOC_X'], curry_data['LOC_Y'] + 60, gridsize=(30, 30), extent=(-300, 300, 0, 940), bins='log', cmap='Blues')
 
 # Annotate player name and season
-ax.text(0, 1.05, '{player_name} \n {selected_year} Regular Season', transform=ax.transAxes, ha='left', va='baseline')
-
+fig.text(0, 1.05, 'Stephen Curry\n2015-16 Regular Season', transform=ax.transAxes, ha='left', va='baseline')
+ax.text(0, -0.075, 'Author: Pablo Salmerón', transform=ax.transAxes, ha='left')
 # Save and show figure
 plt.savefig('ShotChart.png', dpi=300, bbox_inches='tight')
 plt.show()

@@ -10,6 +10,28 @@ from nba_api.stats.endpoints import shotchartdetail
 import json
 import requests
 
+
+#TEST
+curry_pic = urllib.request('http://stats.nba.com/media/players/230x185/201939.png', '201939')
+
+curry_profile_pic = plt.imread(curry_pic[0])
+plt.imshow(curry_profile_pic)
+plt.show()
+
+lebron_pic = urllib.request('http://stats.nba.com/media/players/230x185/2544.png', '2544')
+
+lebron_profile_pic = plt.imread(lebron_pic[0])
+plt.imshow(lebron_profile_pic)
+plt.show()
+
+doncic_pic = urllib.request('http://stats.nba.com/media/players/230x185/1629029.png', '1629029')
+
+doncic_profile_pic = plt.imread(doncic_pic[0])
+plt.imshow(doncic_profile_pic)
+plt.show()
+
+
+
 st.title('NBA Stats Explorer')
 
 st.markdown("""

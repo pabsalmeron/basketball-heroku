@@ -1,5 +1,5 @@
 import urllib.request
-
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import streamlit as st
 import pandas as pd
 import base64
@@ -111,28 +111,55 @@ all_stars_dict = {'Stephen Curry': 201939,
                   'Giannis Antetokounmpo': 203507,
                   'Kawhi Leonard': 202695}
 
-
-
+#CHOOSING PLAYER - SHOT CHART
 st.sidebar.header('Shot Chart Player')
 
 player_selector = st.sidebar.radio('Select your Player!', ('Stephen Curry','LeBron James','Giannis Antetokounmpo'))
 
-if player_selector == 'Stephen Curry':
-    name = 'Stephen'
-    lastname = 'Curry'
-    selected_team = 'Golden State Warriors'
-elif player_selector == 'LeBron James':
-    name = 'LeBron'
-    lastname = 'James'
-    selected_team = 'Los Angeles Lakers'
-elif player_selector == 'Giannis Antetokounmpo':
-    name = 'Giannis'
-    lastname = 'Antetokounmpo'
-    selected_team = 'Milwaukee Bucks'
 #elif player_selector == 'Luka Doncic':
 #    name = 'Luka'
 #    lastname = 'Doncic'
 #    selected_team = 'Dallas Mavericks'
+if player_selector == 'Stephen Curry':
+    name = 'Stephen'
+    lastname = 'Curry'
+    selected_team = 'Golden State Warriors'
+    #Player picture
+    #Curry
+    player_pic = urllib.request.urlretrieve('http://stats.nba.com/media/players/230x185/201939.png', '201939.png')
+    player_profile_pic = plt.imread(player_request[0])    
+    #Team Logo
+    logo_team = 'GSW'
+    logo_url = "https://d2p3bygnnzw9w3.cloudfront.net/req/202001161/tlogo/bbr/" + logo_team + ".png"
+    team_pic = urllib.request.urlretrieve(logo_url)
+    team_logo = plt.imread(team_pic[0])
+    
+elif player_selector == 'LeBron James':
+    name = 'LeBron'
+    lastname = 'James'
+    selected_team = 'Los Angeles Lakers'
+    #Lebron
+    player_pic = urllib.request.urlretrieve('http://stats.nba.com/media/players/230x185/2544.png', '2544.png')
+    player_profile_pic = plt.imread(player_pic[0])   
+    #Team Logo
+    logo_team = 'LAL'
+    logo_url = "https://d2p3bygnnzw9w3.cloudfront.net/req/202001161/tlogo/bbr/" + logo_team + ".png"
+    team_pic = urllib.request.urlretrieve(logo_url)
+    team_logo = plt.imread(team_pic[0])    
+    
+elif player_selector == 'Giannis Antetokounmpo':
+    name = 'Giannis'
+    lastname = 'Antetokounmpo'
+    selected_team = 'Milwaukee Bucks'
+    #Anteto
+    player_pic = urllib.request.urlretrieve('http://stats.nba.com/media/players/230x185/203507.png', '203507.png')
+    player_profile_pic = plt.imread(player_pic[0])    
+    #Team Logo
+    logo_team = 'MIL'
+    logo_url = "https://d2p3bygnnzw9w3.cloudfront.net/req/202001161/tlogo/bbr/" + logo_team + ".png"
+    team_pic = urllib.request.urlretrieve(logo_url)
+    team_logo = plt.imread(team_pic[0])
+
 
 def get_player_id(first, last):
     for player in players:
@@ -200,9 +227,23 @@ ax = create_court(ax, 'black')
 # Plot hexbin of shots
 ax.hexbin(player_data['LOC_X'], player_data['LOC_Y'] + 60, gridsize=(30, 30), extent=(-300, 300, 0, 940), bins='log', cmap='Blues')
 
+#Add Player Picture
+
+player_imagebox = OffsetImage(player_profile_pic, zoom=0.32)
+player_imagebox.set_offset((0,0))
+xy = [0,0]
+ab_player_imagebox = AnnotationBbox(player_imagebox, xy, xybox=(-102,-237), boxcoords='offset points', frameon=False)
+ax.add_artist(ab_player_imagebox)
+
+    # Put the logo behind
+team_logo_img = OffsetImage(team_logo, zoom=1)
+team_logo_img.set_offset((180,250))
+ax.add_artist(team_logo_img)
+
 # Annotate player name and season
-fig.text(0, 1.05, f'{name} {lastname} \n{formated_year} Regular Season', transform=ax.transAxes, ha='left', va='baseline')
-ax.text(0, -0.075, 'Author: Pablo Salmerón', transform=ax.transAxes, ha='left')
+fig.text(0, 1.05, f'{name} {lastname} \n{selected_year} RS Shot Chart', transform=ax.transAxes, ha='left', va='baseline',fontsize=11.5)
+ax.text(0, -0.075, 'Data Source: stats.nba.com'
+        '\nAuthor: Pablo Salmerón', transform=ax.transAxes, ha='left', fontsize=8)
 
 st.pyplot(fig)
 

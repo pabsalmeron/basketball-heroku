@@ -127,7 +127,7 @@ if player_selector == 'Stephen Curry':
     #Player picture
     #Curry
     player_pic = urllib.request.urlretrieve('http://stats.nba.com/media/players/230x185/201939.png', '201939.png')
-    player_profile_pic = plt.imread(player_request[0])    
+    player_profile_pic = plt.imread(player_pic[0])    
     #Team Logo
     logo_team = 'GSW'
     logo_url = "https://d2p3bygnnzw9w3.cloudfront.net/req/202001161/tlogo/bbr/" + logo_team + ".png"

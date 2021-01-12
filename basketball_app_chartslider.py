@@ -236,9 +236,20 @@ ab_player_imagebox = AnnotationBbox(player_imagebox, xy, xybox=(-102,-237), boxc
 ax.add_artist(ab_player_imagebox)
 
     # Put the logo behind
-team_logo_img = OffsetImage(team_logo, zoom=1)
-team_logo_img.set_offset((180,250))
-ax.add_artist(team_logo_img)
+#team_logo_img = OffsetImage(team_logo, zoom=1)
+#team_logo_img.set_offset((180,250))
+#ax.add_artist(team_logo_img)
+
+
+# Add Team Logo
+    #To put the logo inside the graph delete #
+
+#team_imagebox = OffsetImage(team_logo, zoom=0.6)
+#team_imagebox.set_offset((0,0))
+#xy = [0,0]
+#ab_team_imagebox = AnnotationBbox(team_imagebox, xy, xybox=(100,-237), boxcoords='offset points', frameon=False)
+#ax.add_artist(ab_team_imagebox)
+
 
 # Annotate player name and season
 fig.text(0, 1.05, f'{name} {lastname} \n{selected_year} RS Shot Chart', transform=ax.transAxes, ha='left', va='baseline',fontsize=11.5)

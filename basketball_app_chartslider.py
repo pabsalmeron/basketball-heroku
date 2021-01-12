@@ -134,6 +134,7 @@ if player_selector == 'Stephen Curry':
     team_pic = urllib.request.urlretrieve(logo_url)
     team_logo = plt.imread(team_pic[0])
     
+    
 elif player_selector == 'LeBron James':
     name = 'LeBron'
     lastname = 'James'
@@ -241,24 +242,24 @@ ax.add_artist(ab_player_imagebox)
 #ax.add_artist(team_logo_img)
 
 
-# Add Team Logo
-    #To put the logo inside the graph delete #
+    # Put the logo over
+team_imagebox = OffsetImage(team_logo, zoom=0.4)
+team_imagebox.set_offset((0,0))
+xy = [0,0]
+ab_team_imagebox = AnnotationBbox(team_imagebox, xy, xybox=(115,30), boxcoords='offset points', frameon=False)
+ax.add_artist(ab_team_imagebox)
 
-#team_imagebox = OffsetImage(team_logo, zoom=0.6)
-#team_imagebox.set_offset((0,0))
-#xy = [0,0]
-#ab_team_imagebox = AnnotationBbox(team_imagebox, xy, xybox=(100,-237), boxcoords='offset points', frameon=False)
-#ax.add_artist(ab_team_imagebox)
-
+team_logo_img = OffsetImage(team_logo, zoom=1)
+team_logo_img.set_offset((180,250))
+ax.add_artist(team_logo_img)
 
 # Annotate player name and season
-fig.text(0, 1.05, f'{name} {lastname} \n{selected_year} RS Shot Chart', transform=ax.transAxes, ha='left', va='baseline',fontsize=11.5)
+fig.text(0, 1.05, f'{name} {lastname} \nRegular Season {formated_year} \nShot Chart', transform=ax.transAxes, ha='left', va='baseline',fontsize=11.5)
 ax.text(0, -0.075, 'Data Source: stats.nba.com'
         '\nAuthor: Pablo Salmerón', transform=ax.transAxes, ha='left', fontsize=8)
 
 st.pyplot(fig)
-
-
+ 
 
 
 

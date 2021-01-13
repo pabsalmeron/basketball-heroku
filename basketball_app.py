@@ -18,10 +18,12 @@ st.markdown("""
 This app performs simple webscraping of NBA player stats data!
 * **Python libraries:** base64, pandas, streamlit
 * **Data source:** [Basketball-reference.com](https://www.basketball-reference.com/).
+* **Based on** Data Professor
+* **Updated and made by** Pablo Salmerón
 """)
 
 st.sidebar.header('User Input Features')
-selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950,2020))))
+selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950,2022))))
 # Web scraping of NBA player stats
 @st.cache
 def load_data(year):

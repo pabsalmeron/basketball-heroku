@@ -7,4 +7,3 @@ matplotlib
 base58==2.0.1
 nba-api==1.1.9
 requests==2.22.0
-urllib

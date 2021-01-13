@@ -15,7 +15,7 @@ import requests
 st.title('NBA Player Stats Explorer')
 
 st.markdown("""
-This app performs simple webscraping of NBA player stats data!
+This app performs simple webscraping of NBA player stats data, and also a shot chart of the best league players!
 * **Python libraries:** base64, pandas, streamlit
 * **Data source:** [Basketball-reference.com](https://www.basketball-reference.com/).
 * **Based on** Data Professor
@@ -56,13 +56,16 @@ df_selected_team = playerstats[(playerstats.Tm.isin(selected_team)) & (playersta
 
 df_selected_player = playerstats[playerstats.Player.isin(selected_player)]
 
-st.header('Player Stats That You Are Looking For! ')
+st.header('Single Player Stats')
 st.markdown("""
 *Just Write in the Search Box!*
 """)
 st.dataframe(df_selected_player)
 
-st.header('Display Players Stats of Selected Team(s)')
+st.header('Multiplayer Stats')
+st.markdown("""
+*Just select what you need in the sidebar!*
+""")
 st.write('Data Dimension: ' + str(df_selected_team.shape[0]) + ' rows and ' + str(df_selected_team.shape[1]) + ' columns.')
 st.dataframe(df_selected_team)
 

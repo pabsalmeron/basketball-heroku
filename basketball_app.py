@@ -32,7 +32,7 @@ This app performs simple webscraping of NBA player stats data, and displays the 
 * **Python libraries:** base64, pandas, streamlit, nba_api, numpy, base64, matplotlib, PIL, seaborn, requests
 * **Data source:** [Basketball-reference.com](https://www.basketball-reference.com/), stats.nba.com
 * **Based on:** Data Professor project
-* **Made by:** Pablo Salmeron .
+* **Made by:** Pablo Salmeron
 """)
 
 st.sidebar.header('User Input Features')

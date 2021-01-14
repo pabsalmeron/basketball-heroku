@@ -11,15 +11,28 @@ from nba_api.stats.endpoints import shotchartdetail
 import json
 import requests
 
-st.title('NBA Player Stats Explorer')
+# Creates a double column to insert the nba logo and the title web app
+col1,col2 = st.beta_columns(2)
 
-st.markdown("""
+# Change the size of the first and the second column to fit better
+col1, col2 = st.beta_columns((1, 8))
+
+# Put the title with the logo
+nba_logo = Image.open('nba-logo.png')
+
+col1.image(nba_logo, width=80)
+col2.title('NBA Player Stats Explorer')
+
+# About
+expander_bar = st.beta_expander('About This App')
+
+expander_bar.markdown("""
 This app performs simple webscraping of NBA player stats data, and displays the data in awesome ways!
-* **Functionalities: displays the data with individual individual or collective input: \ntable, heatmap and an amazing shot chart (just for the best players in the league)
-* **Python libraries:** base64, pandas, streamlit
-* **Data source:** [Basketball-reference.com](https://www.basketball-reference.com/)
-* **Based on** Data Professor project
-* **Made by** Pablo Salmeron .
+* **Functionalities:** displays the data with individual individual or collective input: \ntable, heatmap and an amazing shot chart (just for the best players in the league)
+* **Python libraries:** base64, pandas, streamlit, nba_api, numpy, base64, matplotlib, PIL, seaborn, requests
+* **Data source:** [Basketball-reference.com](https://www.basketball-reference.com/), stats.nba.com
+* **Based on:** Data Professor project
+* **Made by:** Pablo Salmeron .
 """)
 
 st.sidebar.header('User Input Features')
@@ -56,13 +69,13 @@ df_selected_team = playerstats[(playerstats.Tm.isin(selected_team)) & (playersta
 
 df_selected_player = playerstats[playerstats.Player.isin(selected_player)]
 
-st.header('Player Stats That You Are Looking For! ')
+st.header('Single Player Stats')
 st.markdown("""
 *Just Write in the Search Box!*
 """)
 st.dataframe(df_selected_player)
 
-st.header('Display Players Stats of Selected Team(s)')
+st.header('Multiple Player Stats')
 st.write('Data Dimension: ' + str(df_selected_team.shape[0]) + ' rows and ' + str(df_selected_team.shape[1]) + ' columns.')
 st.dataframe(df_selected_team)
 
@@ -115,7 +128,8 @@ all_stars_dict = {'Stephen Curry': 201939,
 
 #CHOOSING PLAYER - SHOT CHART
 st.sidebar.header('Shot Chart Player')
-
+#Disable the deprecated advice for st.pylot(), should be st.pylot(fig)
+st.set_option('deprecation.showPyplotGlobalUse', False)
 player_selector = st.sidebar.radio('Select your Player!', ('Stephen Curry','LeBron James','Giannis Antetokounmpo'))
 
 #elif player_selector == 'Luka Doncic':

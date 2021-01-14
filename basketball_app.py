@@ -14,13 +14,16 @@ import requests
 st.title('NBA Player Stats Explorer')
 
 st.markdown("""
-This app performs simple webscraping of NBA player stats data!
+This app performs simple webscraping of NBA player stats data, and displays the data in awesome ways!
+* **Functionalities: displays the data with individual individual or collective input: \ntable, heatmap and an amazing shot chart (just for the best players in the league)
 * **Python libraries:** base64, pandas, streamlit
-* **Data source:** [Basketball-reference.com](https://www.basketball-reference.com/).
+* **Data source:** [Basketball-reference.com](https://www.basketball-reference.com/)
+* **Based on** Data Professor project
+* **Made by** Pablo Salmeron .
 """)
 
 st.sidebar.header('User Input Features')
-selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950,2020))))
+selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950,2022))))
 # Web scraping of NBA player stats
 @st.cache
 def load_data(year):
@@ -112,7 +115,7 @@ all_stars_dict = {'Stephen Curry': 201939,
 
 #CHOOSING PLAYER - SHOT CHART
 st.sidebar.header('Shot Chart Player')
-st.set_option('deprecation.showPyplotGlobalUse', False)
+
 player_selector = st.sidebar.radio('Select your Player!', ('Stephen Curry','LeBron James','Giannis Antetokounmpo'))
 
 #elif player_selector == 'Luka Doncic':
@@ -133,5 +136,3 @@ elif player_selector == 'Giannis Antetokounmpo':
     image = Image.open('Giannis-shot-chart.png')
     st.image(image, use_column_width=True)
     st.pyplot()
-
-

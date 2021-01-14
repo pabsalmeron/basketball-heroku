@@ -112,7 +112,7 @@ all_stars_dict = {'Stephen Curry': 201939,
 
 #CHOOSING PLAYER - SHOT CHART
 st.sidebar.header('Shot Chart Player')
-
+st.set_option('deprecation.showPyplotGlobalUse', False)
 player_selector = st.sidebar.radio('Select your Player!', ('Stephen Curry','LeBron James','Giannis Antetokounmpo'))
 
 #elif player_selector == 'Luka Doncic':

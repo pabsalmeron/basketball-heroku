@@ -69,7 +69,7 @@ df_selected_team = playerstats[(playerstats.Tm.isin(selected_team)) & (playersta
 
 df_selected_player = playerstats[playerstats.Player.isin(selected_player)]
 
-st.header('Single Player Stats')
+st.header('Player Stats')
 st.markdown("""
 *Just Write in the Search Box!*
 """)

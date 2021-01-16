@@ -28,7 +28,7 @@ expander_bar = st.beta_expander('About This App')
 
 expander_bar.markdown("""
 This app performs simple webscraping of NBA player stats data, and displays the data in awesome ways!
-* **Functionalities:** displays the data with individual individual or collective input: \ntable, heatmap and an amazing shot chart (just for the best players in the league)
+* **Functionalities:** displays the data with individual or collective input: \ntable, heatmap and an amazing shot chart (exclusive for the best players in the league)
 * **Python libraries:** base64, pandas, streamlit, nba_api, numpy, base64, matplotlib, PIL, seaborn, requests
 * **Data source:** [Basketball-reference.com](https://www.basketball-reference.com/), stats.nba.com
 * **Based on:** Data Professor project
